@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "server": "node ./backend/server.js",
-    "dev": "nodemon ./backend/server.js"
+    "dev": "nodemon ./backend/server.js",
+    "build" : "npm i"
   },
   "author": "",
   "license": "ISC",
