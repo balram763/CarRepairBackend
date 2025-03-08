@@ -5,7 +5,6 @@ const Car = require("../model/carModel")
 
 const getComplaints = expressAsyncHandler(
     async(req,res) => {
-        console.log(req.user)
         const user = await User.findById(req.user._id.toString())
 
         if(!user){
@@ -79,10 +78,10 @@ const raiseComplaint = expressAsyncHandler(
     res.status(401);
     throw new Error("Please Fill All Details");
   }
-
   // Check User Using JWT
 
   const user = await User.findById(req.user._id.toString());
+  
 
   if (!user) {
     res.status(404);
@@ -91,8 +90,8 @@ const raiseComplaint = expressAsyncHandler(
 
   const complaint = await Car.create({
     user: req.user._id,
+    registration : registration,
     car: car.toLowerCase(),
-    registration,
     description: description,
     status: "open",
   });
@@ -102,6 +101,7 @@ const raiseComplaint = expressAsyncHandler(
     throw new Error("Complaint Not Raised");
   }
 
+  console.log(complaint)
   res.status(201).json(complaint);
 })
 

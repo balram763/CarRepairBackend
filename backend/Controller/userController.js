@@ -5,7 +5,7 @@ let jwt = require('jsonwebtoken');
 
 
 const registerUser = expressAsyncHandler(async(req,res) => {
-    const {name , email , password} = req.body
+    const {name , email , password, isAdmin} = req.body
 
     if(!name || !email || !password){
         res.status(400)
@@ -38,7 +38,8 @@ const registerUser = expressAsyncHandler(async(req,res) => {
         id : user._id,
         name : user.name,
         email : user.email,
-        token : generateToken(user._id)
+        token : generateToken(user._id),
+        isAdmin : user.isAdmin
     })
     res.send("register successfully")
 })
@@ -47,7 +48,7 @@ const registerUser = expressAsyncHandler(async(req,res) => {
 const loginUser = expressAsyncHandler(
     async(req,res) => {
         
-    const {email , password} = req.body
+    const {email , password,isAdmin} = req.body
 
     if(!email || !password){
         res.status(400)
@@ -61,17 +62,14 @@ const loginUser = expressAsyncHandler(
             id : user._id,
             name : user.name,
             email : user.email,
-            token : generateToken(user._id)
+            token : generateToken(user._id),
+            isAdmin : user.isAdmin
         })
     }
     else{
         res.status(400)
         throw new Error("invalid Credentials")
     }
-    
-    
-
-
     }
 )
 

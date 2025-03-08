@@ -46,7 +46,7 @@ const addNote = expressAsyncHandler(async (req, res) => {
 
   if (!note) {
     res.status(400);
-    throw new Error("Note is not Added");
+    throw new Error("Note is not  Added");
   }
 
   res.status(201).json(note);
