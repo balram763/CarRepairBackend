@@ -3,6 +3,7 @@ const connectDB = require('./config/db_Config')
 const errorHandler = require('./middleware/errorHandler')
 require('dotenv').config()
 const cors = require('cors');
+const path = require('path')
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -21,6 +22,10 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
+
+// app.use("/uploads",express.static('upload'))
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))

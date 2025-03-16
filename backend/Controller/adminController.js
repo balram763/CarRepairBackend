@@ -49,9 +49,10 @@ const singleUser = expressAsyncHandler(async(req,res)=>{
     }
 
     // res.status(200).json(user._id)
-    const car = await Car.find({user : "66deb64b1fabd7c275314485"})
-    const note = await Note.find({user : "66deb64b1fabd7c275314485"})
-    res.status(200).json({car,note})
+
+    const car = await Car.find({user : req.params.id})
+    const note = await Note.find({user : req.params.id})
+    res.status(200).json({user,car,note})
 
     // res.status(200).json(note)
 })

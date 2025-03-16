@@ -2,7 +2,9 @@ const expressAsyncHandler = require("express-async-handler");
 const User = require("../model/userModel");
 const Note = require("../model/noteModel");
 
+
 const getNotes = expressAsyncHandler(async (req, res) => {
+
   const user = await User.findById(req.user._id.toString());
 
   if (!user) {
@@ -10,7 +12,8 @@ const getNotes = expressAsyncHandler(async (req, res) => {
     throw new Error("User Not Exist");
   }
 
-  const notes = await Note.find({ user: user._id });
+  // const notes = await Note.find({ user: user._id });
+  const notes = await Note.find({ car: req.params.id });
 
   if (!notes) {
     res.status(404);
@@ -21,7 +24,9 @@ const getNotes = expressAsyncHandler(async (req, res) => {
 });
 
 const addNote = expressAsyncHandler(async (req, res) => {
-  const { text } = req.body;
+
+  const { id,text } = req.body;
+  const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
   if (!text) {
     res.status(400);
@@ -36,12 +41,12 @@ const addNote = expressAsyncHandler(async (req, res) => {
     throw new Error("User Not Found");
   }
 
-  //   Add Note
-
   const note = await Note.create({
     user: user._id,
-    car: req.params.id,
+    car: id,
     note: text,
+    isStaff : user.email === 'admin@gmail.com' ? true : false,
+    image : imageUrl
   });
 
   if (!note) {

@@ -21,6 +21,11 @@ const noteSchema = new mongoose.Schema(
       default: false,
       required: true,
     },
+    image : {
+      type : String,
+      // required : true
+      default : null
+    }
   },
   {
     timestamps: true,
