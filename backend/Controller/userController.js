@@ -90,11 +90,7 @@ const generateToken = (id) => {
 };
 
 // Private Route
-const privateController = expressAsyncHandler(async (req, res) => {
-    res.json({ message: "Private route accessed successfully" });
-});
 
-module.exports = { registerUser, loginUser, privateController };
 const privateController = expressAsyncHandler(
     async(req,res) => {
         res.json({
