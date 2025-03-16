@@ -45,33 +45,41 @@ const registerUser = expressAsyncHandler(async(req,res) => {
 })
 
 
-const loginUser = expressAsyncHandler(
-    async(req,res) => {
-        
-    const {email , password,isAdmin} = req.body
+const expressAsyncHandler = require("express-async-handler");
+const bcrypt = require("bcryptjs");
+const User = require("../models/userModel"); // Import User model
+const generateToken = require("../utils/generateToken"); // Token generator function
 
-    if(!email || !password){
-        res.status(400)
-        throw new Error("Fill All Details")
+const loginUser = expressAsyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ message: "Fill all details" });
     }
 
-    const user = await User.findOne({email})
+    const user = await User.findOne({ email });
 
-        if(user && bcrypt.compareSync(password, user.password)){
-        res.status(200).json({
-            id : user._id,
-            name : user.name,
-            email : user.email,
-            token : generateToken(user._id),
-            isAdmin : user.isAdmin
-        })
+    if (!user) {
+        return res.status(400).json({ message: "USER NOT FOUND SIGN UP FIRST" });
     }
-    else{
-        res.status(400)
-        throw new Error("invalid Credentials")
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    
+    if (!isMatch) {
+        return res.status(400).json({ message: "Invalid credentials" });
     }
-    }
-)
+
+    res.status(200).json({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user._id),
+        isAdmin: user.isAdmin,
+    });
+});
+
+module.exports = loginUser;
+
 
 //Genetate token 
 
