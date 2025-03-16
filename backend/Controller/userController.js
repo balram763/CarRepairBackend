@@ -3,7 +3,7 @@ const User = require("../model/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// Register User
+
 const registerUser = expressAsyncHandler(async (req, res) => {
     const { name, email, password, isAdmin } = req.body;
 
@@ -17,7 +17,6 @@ const registerUser = expressAsyncHandler(async (req, res) => {
         return res.status(400).json({ message: "User already exists" });
     }
 
-    // Encrypt Password (Use async version)
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -45,10 +44,6 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 const loginUser = expressAsyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
-
-const loginUser = expressAsyncHandler(async (req, res) => {
-    const { email, password } = req.body;
-
     if (!email || !password) {
         return res.status(400).json({ message: "Fill all details" });
     }
@@ -56,9 +51,9 @@ const loginUser = expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-        return res.status(400).json({ message: "User not found. Sign up first" });
-    }
 
+        return res.status(400).json({ message: "Email Not Registed" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     
@@ -75,14 +70,7 @@ const loginUser = expressAsyncHandler(async (req, res) => {
     });
 });
 
-    res.status(200).json({
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        token: generateToken(user._id),
-        isAdmin: user.isAdmin,
-    });
-});
+
 
 // Generate Token
 const generateToken = (id) => {
@@ -90,14 +78,10 @@ const generateToken = (id) => {
 };
 
 // Private Route
-
-const privateController = expressAsyncHandler(
-    async(req,res) => {
-        res.json({
-            msg : "private route"
-        })
-    }
-)
+const privateController = expressAsyncHandler(async (req, res) => {
+    res.json({ message: "Private route accessed successfully" });
+});
 
 
 module.exports = {registerUser,loginUser,privateController}
+
