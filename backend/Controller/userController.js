@@ -141,6 +141,12 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 const loginUser = expressAsyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
+<<<<<<< HEAD
+=======
+const loginUser = expressAsyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+>>>>>>> 0a9d18464ddd43be118737f46f99ffb62aca1167
     if (!email || !password) {
         return res.status(400).json({ message: "Fill all details" });
     }
@@ -148,6 +154,7 @@ const loginUser = expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
+<<<<<<< HEAD
         return res.status(400).json({ message: "User not found. Sign up first" });
     }
 
@@ -156,6 +163,25 @@ const loginUser = expressAsyncHandler(async (req, res) => {
     if (!isMatch) {
         return res.status(400).json({ message: "Invalid credentials" });
     }
+=======
+        return res.status(400).json({ message: "USER NOT FOUND SIGN UP FIRST" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    
+    if (!isMatch) {
+        return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    res.status(200).json({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user._id),
+        isAdmin: user.isAdmin,
+    });
+});
+>>>>>>> 0a9d18464ddd43be118737f46f99ffb62aca1167
 
     res.status(200).json({
         id: user._id,
@@ -176,4 +202,17 @@ const privateController = expressAsyncHandler(async (req, res) => {
     res.json({ message: "Private route accessed successfully" });
 });
 
+<<<<<<< HEAD
 module.exports = { registerUser, loginUser, privateController };
+=======
+const privateController = expressAsyncHandler(
+    async(req,res) => {
+        res.json({
+            msg : "private route"
+        })
+    }
+)
+
+
+module.exports = {registerUser,loginUser,privateController}
+>>>>>>> 0a9d18464ddd43be118737f46f99ffb62aca1167
